@@ -582,6 +582,7 @@ public class MainActivity extends AppCompatActivity {
 
             String strRx = "";
             int c=0;
+            int k=0;
 
             //BLuetoothi pakettide vastuvõtmine ja ekraanile panek
             while (true) {
@@ -608,13 +609,14 @@ public class MainActivity extends AppCompatActivity {
                     //Originaal programmi keepalive:
                     //;E??????????;E??????????;E??????????;E??????????;E??????????;E??????????
                     c++;
-                    if(c>10){
-                        String kl="?";
-                        byte[] bytesToSend = kl.getBytes();
-                        connectedOutputStream.write(bytesToSend);
-                        c=0;
-                    }
 
+                    if(c>10){
+                            String kl = "?";
+                            byte[] bytesToSend = kl.getBytes();
+                            connectedOutputStream.write(bytesToSend);
+                            c=0;
+                            k++;
+                    }
 
 
                 } catch (IOException e) {
