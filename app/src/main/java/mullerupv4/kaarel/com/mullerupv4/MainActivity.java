@@ -262,8 +262,9 @@ public class MainActivity extends AppCompatActivity {
                     //String t="A";
                     //byte[] bytesToSend = t.getBytes();
                     //myThreadConnected.write(bytesToSend);
-                    byte[] NewLine = "\n".getBytes();
-                    myThreadConnected.write(NewLine);
+                    byte[] bytesToSend = {(byte)0x0D};
+                    //byte[] NewLine =  (byte)(decimal & 0xFF);
+                    myThreadConnected.write(bytesToSend);
                 }
             }});
 
