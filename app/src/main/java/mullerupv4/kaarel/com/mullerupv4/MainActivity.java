@@ -1,40 +1,39 @@
 package mullerupv4.kaarel.com.mullerupv4;
 
-        import android.app.Activity;
-        import android.bluetooth.BluetoothAdapter;
-        import android.bluetooth.BluetoothDevice;
-        import android.bluetooth.BluetoothSocket;
-        import android.content.Intent;
-        import android.content.pm.PackageManager;
-        import android.os.Bundle;
-        import android.os.SystemClock;
-        import android.support.v7.app.AppCompatActivity;
-        import android.view.View;
-        import android.widget.AdapterView;
-        import android.widget.ArrayAdapter;
-        import android.widget.Button;
-        import android.widget.EditText;
-        import android.widget.LinearLayout;
-        import android.widget.ListView;
-        import android.widget.TextView;
-        import android.widget.Toast;
+import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.os.SystemClock;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
-        import java.io.IOException;
-        import java.io.InputStream;
-        import java.io.OutputStream;
-        import java.util.ArrayList;
-        import java.util.Set;
-        import java.util.UUID;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.UUID;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_ENABLE_BT = 1;
-
+    private final String UUID_STRING_WELL_KNOWN_SPP =
+            "00001101-0000-1000-8000-00805F9B34FB";
     BluetoothAdapter bluetoothAdapter;
-
     ArrayList<BluetoothDevice> pairedDeviceArrayList;
-
     TextView textStatus;
     int textByteCnt;
     ListView listViewPairedDevice;
@@ -43,321 +42,312 @@ public class MainActivity extends AppCompatActivity {
     Button button1, button2, button3, button4, button5, button6, button7, button8, button9, button10;
     Button button11, button12, button13, button14, button15, button16, button17, button18, button19, button20;
     Button button21, button22, button23, button24;
-
-    String kl="?";
-
+    String kl = "?";
     ArrayAdapter<BluetoothDevice> pairedDeviceAdapter;
-    private UUID myUUID;
-    private final String UUID_STRING_WELL_KNOWN_SPP =
-            "00001101-0000-1000-8000-00805F9B34FB";
-
     ThreadConnectBTdevice myThreadConnectBTdevice;
     ThreadConnected myThreadConnected;
+    private UUID myUUID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        textStatus = (TextView)findViewById(R.id.status);
-        listViewPairedDevice = (ListView)findViewById(R.id.pairedlist);
+        textStatus = (TextView) findViewById(R.id.status);
+        listViewPairedDevice = (ListView) findViewById(R.id.pairedlist);
 
-        inputPane = (LinearLayout)findViewById(R.id.inputpane);
-        button1 = (Button)findViewById(R.id.button1);
-        button2 = (Button)findViewById(R.id.button2);
-        button3 = (Button)findViewById(R.id.button3);
-        button4 = (Button)findViewById(R.id.button4);
-        button5 = (Button)findViewById(R.id.button5);
-        button6 = (Button)findViewById(R.id.button6);
-        button7 = (Button)findViewById(R.id.button7);
-        button8 = (Button)findViewById(R.id.button8);
-        button9 = (Button)findViewById(R.id.button9);
-        button10 = (Button)findViewById(R.id.button10);
-        button11 = (Button)findViewById(R.id.button11);
-        button12 = (Button)findViewById(R.id.button12);
-        button13 = (Button)findViewById(R.id.button13);
-        button14 = (Button)findViewById(R.id.button14);
-        button15 = (Button)findViewById(R.id.button15);
-        button16 = (Button)findViewById(R.id.button16);
-        button17 = (Button)findViewById(R.id.button17);
-        button18 = (Button)findViewById(R.id.button18);
-        button19 = (Button)findViewById(R.id.button19);
-        button20 = (Button)findViewById(R.id.button20);
-        button21 = (Button)findViewById(R.id.button21);
-        button22 = (Button)findViewById(R.id.button22);
-        button23 = (Button)findViewById(R.id.button23);
-        button24 = (Button)findViewById(R.id.button24);
+        inputPane = (LinearLayout) findViewById(R.id.inputpane);
+        button1 = (Button) findViewById(R.id.button1);
+        button2 = (Button) findViewById(R.id.button2);
+        button3 = (Button) findViewById(R.id.button3);
+        button4 = (Button) findViewById(R.id.button4);
+        button5 = (Button) findViewById(R.id.button5);
+        button6 = (Button) findViewById(R.id.button6);
+        button7 = (Button) findViewById(R.id.button7);
+        button8 = (Button) findViewById(R.id.button8);
+        button9 = (Button) findViewById(R.id.button9);
+        button10 = (Button) findViewById(R.id.button10);
+        button11 = (Button) findViewById(R.id.button11);
+        button12 = (Button) findViewById(R.id.button12);
+        button13 = (Button) findViewById(R.id.button13);
+        button14 = (Button) findViewById(R.id.button14);
+        button15 = (Button) findViewById(R.id.button15);
+        button16 = (Button) findViewById(R.id.button16);
+        button17 = (Button) findViewById(R.id.button17);
+        button18 = (Button) findViewById(R.id.button18);
+        button19 = (Button) findViewById(R.id.button19);
+        button20 = (Button) findViewById(R.id.button20);
+        button21 = (Button) findViewById(R.id.button21);
+        button22 = (Button) findViewById(R.id.button22);
+        button23 = (Button) findViewById(R.id.button23);
+        button24 = (Button) findViewById(R.id.button24);
 
-        button1.setOnClickListener(new View.OnClickListener(){
-
+        button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(myThreadConnected!=null){
-                    String t="F";
-                    byte[] bytesToSend = t.getBytes();
+                //Klahv F
+                if (myThreadConnected != null) {
+                    byte[] bytesToSend = {(byte) 0x46};
                     myThreadConnected.write(bytesToSend);
                 }
-            }});
+            }
+        });
 
-        button2.setOnClickListener(new View.OnClickListener(){
-
+        button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(myThreadConnected!=null){
-                    String t="*";
-                    byte[] bytesToSend = t.getBytes();
+                //Klahv *
+                if (myThreadConnected != null) {
+                    byte[] bytesToSend = {(byte) 0x2A};
                     myThreadConnected.write(bytesToSend);
                 }
-            }});
+            }
+        });
 
-        button3.setOnClickListener(new View.OnClickListener(){
-
+        button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(myThreadConnected!=null){
-                    String t="+";
-                    byte[] bytesToSend = t.getBytes();
+                //Klahv +
+                if (myThreadConnected != null) {
+                    byte[] bytesToSend = {(byte) 0x2B};
                     myThreadConnected.write(bytesToSend);
                 }
-            }});
+            }
+        });
 
-        button4.setOnClickListener(new View.OnClickListener(){
-
+        button4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(myThreadConnected!=null){
-                    String t="=";
-                    byte[] bytesToSend = t.getBytes();
+                //Klahv =
+                if (myThreadConnected != null) {
+                    byte[] bytesToSend = {(byte) 0x3D};
                     myThreadConnected.write(bytesToSend);
                 }
-            }});
+            }
+        });
 
-        button5.setOnClickListener(new View.OnClickListener(){
-
+        button5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(myThreadConnected!=null){
-                    String t="%";
-                    byte[] bytesToSend = t.getBytes();
+                //Klahv %
+                if (myThreadConnected != null) {
+                    byte[] bytesToSend = {(byte) 0x25};
                     myThreadConnected.write(bytesToSend);
                 }
-            }});
+            }
+        });
 
-        button6.setOnClickListener(new View.OnClickListener(){
-
+        button6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(myThreadConnected!=null){
-                    String t="/";
-                    byte[] bytesToSend = t.getBytes();
+                //Klahv /
+                if (myThreadConnected != null) {
+                    byte[] bytesToSend = {(byte) 0x2F};
                     myThreadConnected.write(bytesToSend);
                 }
-            }});
+            }
+        });
 
-        button7.setOnClickListener(new View.OnClickListener(){
-
+        button7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(myThreadConnected!=null){
-                    String t="-";
-                    byte[] bytesToSend = t.getBytes();
+                //Klahv -
+                if (myThreadConnected != null) {
+                    byte[] bytesToSend = {(byte) 0x2D};
                     myThreadConnected.write(bytesToSend);
                 }
-            }});
+            }
+        });
 
-        button8.setOnClickListener(new View.OnClickListener(){
-
+        button8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(myThreadConnected!=null){
-                    String t="Q";
-                    byte[] bytesToSend = t.getBytes();
+                //Klahv I
+                if (myThreadConnected != null) {
+                    byte[] bytesToSend = {(byte) 0x51};
                     myThreadConnected.write(bytesToSend);
                 }
-            }});
+            }
+        });
 
-        button9.setOnClickListener(new View.OnClickListener(){
-
+        button9.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(myThreadConnected!=null){
-                    String t="7";
-                    byte[] bytesToSend = t.getBytes();
+                //Klahv 7
+                if (myThreadConnected != null) {
+                    byte[] bytesToSend = {(byte) 0x37};
                     myThreadConnected.write(bytesToSend);
                 }
-            }});
+            }
+        });
 
-        button10.setOnClickListener(new View.OnClickListener(){
-
+        button10.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(myThreadConnected!=null){
-                    String t="8";
-                    byte[] bytesToSend = t.getBytes();
+                //Klahv 8
+                if (myThreadConnected != null) {
+                    byte[] bytesToSend = {(byte) 0x38};
                     myThreadConnected.write(bytesToSend);
                 }
-            }});
+            }
+        });
 
-        button11.setOnClickListener(new View.OnClickListener(){
-
+        button11.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(myThreadConnected!=null){
-                    String t="9";
-                    byte[] bytesToSend = t.getBytes();
+                //Klahv 9
+                if (myThreadConnected != null) {
+                    byte[] bytesToSend = {(byte) 0x39};
                     myThreadConnected.write(bytesToSend);
                 }
-            }});
+            }
+        });
 
-        button12.setOnClickListener(new View.OnClickListener(){
-
+        button12.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(myThreadConnected!=null){
-                    String t="A";
-                    byte[] bytesToSend = t.getBytes();
+                //Klahv II
+                if (myThreadConnected != null) {
+                    byte[] bytesToSend = {(byte) 0x41};
                     myThreadConnected.write(bytesToSend);
                 }
-            }});
+            }
+        });
 
-        button13.setOnClickListener(new View.OnClickListener(){
-
+        button13.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(myThreadConnected!=null){
-                    String t="4";
-                    byte[] bytesToSend = t.getBytes();
+                //Klahv 4
+                if (myThreadConnected != null) {
+                    byte[] bytesToSend = {(byte) 0x34};
                     myThreadConnected.write(bytesToSend);
                 }
-            }});
+            }
+        });
 
-        button14.setOnClickListener(new View.OnClickListener(){
-
+        button14.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(myThreadConnected!=null){
-                    String t="5";
-                    byte[] bytesToSend = t.getBytes();
+                //Klahv 5
+                if (myThreadConnected != null) {
+                    byte[] bytesToSend = {(byte) 0x35};
                     myThreadConnected.write(bytesToSend);
                 }
-            }});
+            }
+        });
 
-        button15.setOnClickListener(new View.OnClickListener(){
-
+        button15.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(myThreadConnected!=null){
-                    String t="6";
-                    byte[] bytesToSend = t.getBytes();
+                //Klahv 6
+                if (myThreadConnected != null) {
+                    byte[] bytesToSend = {(byte) 0x36};
                     myThreadConnected.write(bytesToSend);
                 }
-            }});
+            }
+        });
 
-        button16.setOnClickListener(new View.OnClickListener(){
-
+        button16.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(myThreadConnected!=null){
-                    //Viskab j2rgmisele reale
-                    //String t="A";
-                    //byte[] bytesToSend = t.getBytes();
-                    //myThreadConnected.write(bytesToSend);
-                    byte[] bytesToSend = {(byte)0x0D};
-                    //byte[] NewLine =  (byte)(decimal & 0xFF);
+                //Klahv III
+                if (myThreadConnected != null) {
+                    byte[] bytesToSend = {(byte) 0x0D};
                     myThreadConnected.write(bytesToSend);
                 }
-            }});
+            }
+        });
 
-        button17.setOnClickListener(new View.OnClickListener(){
-
+        button17.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(myThreadConnected!=null){
-                    String t="1";
-                    byte[] bytesToSend = t.getBytes();
+                //Klahv 1
+                if (myThreadConnected != null) {
+                    byte[] bytesToSend = {(byte) 0x31};
                     myThreadConnected.write(bytesToSend);
                 }
-            }});
+            }
+        });
 
-        button18.setOnClickListener(new View.OnClickListener(){
-
+        button18.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(myThreadConnected!=null){
-                    String t="2";
-                    byte[] bytesToSend = t.getBytes();
+                //Klahv 2
+                if (myThreadConnected != null) {
+                    byte[] bytesToSend = {(byte) 0x32};
                     myThreadConnected.write(bytesToSend);
                 }
-            }});
+            }
+        });
 
-        button19.setOnClickListener(new View.OnClickListener(){
-
+        button19.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(myThreadConnected!=null){
-                    String t="3";
-                    byte[] bytesToSend = t.getBytes();
+                //Klahv 3
+                if (myThreadConnected != null) {
+                    byte[] bytesToSend = {(byte) 0x33};
                     myThreadConnected.write(bytesToSend);
                 }
-            }});
+            }
+        });
 
-        button20.setOnClickListener(new View.OnClickListener(){
-
+        button20.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(myThreadConnected!=null){
-                    String t="W";
-                    byte[] bytesToSend = t.getBytes();
+                //Klahv ^
+                if (myThreadConnected != null) {
+                    byte[] bytesToSend = {(byte) 0x57};
                     myThreadConnected.write(bytesToSend);
                 }
-            }});
+            }
+        });
 
-        button21.setOnClickListener(new View.OnClickListener(){
-
+        button21.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(myThreadConnected!=null){
-                    String t="0";
-                    byte[] bytesToSend = t.getBytes();
+                //Klahv 0
+                if (myThreadConnected != null) {
+                    byte[] bytesToSend = {(byte) 0x30};
                     myThreadConnected.write(bytesToSend);
                 }
-            }});
+            }
+        });
 
-        button22.setOnClickListener(new View.OnClickListener(){
-
+        button22.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(myThreadConnected!=null){
-                    String t="C";
-                    byte[] bytesToSend = t.getBytes();
+                //Klahv Clr
+                if (myThreadConnected != null) {
+                    byte[] bytesToSend = {(byte) 0x43};
                     myThreadConnected.write(bytesToSend);
                 }
-            }});
+            }
+        });
 
-        button23.setOnClickListener(new View.OnClickListener(){
-
+        button23.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(myThreadConnected!=null){
-                    String t="O";
-                    byte[] bytesToSend = t.getBytes();
+                //Klahv Opc
+                if (myThreadConnected != null) {
+                    byte[] bytesToSend = {(byte) 0x4F};
                     myThreadConnected.write(bytesToSend);
                 }
-            }});
+            }
+        });
 
-        button24.setOnClickListener(new View.OnClickListener(){
-
+        button24.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(myThreadConnected!=null){
-                    String t="S";
-                    byte[] bytesToSend = t.getBytes();
+                //Klahv v
+                if (myThreadConnected != null) {
+                    byte[] bytesToSend = {(byte) 0x53};
                     myThreadConnected.write(bytesToSend);
                 }
-            }});
+            }
+        });
 
 
-        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH)){
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH)) {
             Toast.makeText(this,
                     "FEATURE_BLUETOOTH NOT support",
                     Toast.LENGTH_LONG).show();
@@ -432,17 +422,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        if(myThreadConnectBTdevice!=null){
+        if (myThreadConnectBTdevice != null) {
             myThreadConnectBTdevice.cancel();
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode==REQUEST_ENABLE_BT){
-            if(resultCode == Activity.RESULT_OK){
+        if (requestCode == REQUEST_ENABLE_BT) {
+            if (resultCode == Activity.RESULT_OK) {
                 setup();
-            }else{
+            } else {
                 Toast.makeText(this,
                         "BlueTooth pole sisse lülitatud",
                         Toast.LENGTH_SHORT).show();
@@ -453,7 +443,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Called in ThreadConnectBTdevice once connect successed
     //to start ThreadConnected
-    private void startThreadConnected(BluetoothSocket socket){
+    private void startThreadConnected(BluetoothSocket socket) {
 
         myThreadConnected = new ThreadConnected(socket);
         myThreadConnected.start();
@@ -465,8 +455,8 @@ public class MainActivity extends AppCompatActivity {
     */
     private class ThreadConnectBTdevice extends Thread {
 
-        private BluetoothSocket bluetoothSocket = null;
         private final BluetoothDevice bluetoothDevice;
+        private BluetoothSocket bluetoothSocket = null;
 
 
         private ThreadConnectBTdevice(BluetoothDevice device) {
@@ -507,7 +497,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            if(success){
+            if (success) {
                 //connect successful
                 final String msgconnected = "ühendatud:\n"
                         + "BluetoothSocket: " + bluetoothSocket + "\n"
@@ -527,7 +517,7 @@ public class MainActivity extends AppCompatActivity {
 
                 startThreadConnected(bluetoothSocket);
 
-            }else{
+            } else {
                 //fail
             }
         }
@@ -564,7 +554,7 @@ public class MainActivity extends AppCompatActivity {
             InputStream in = null;
             OutputStream out = null;
 
-            try{
+            try {
                 in = socket.getInputStream();
                 out = socket.getOutputStream();
             } catch (IOException e) {
@@ -582,8 +572,8 @@ public class MainActivity extends AppCompatActivity {
             int bytes;
 
             String strRx = "";
-            int c=0;
-            int k=0;
+            int c = 0;
+            int k = 0;
 
             //BLuetoothi pakettide vastuvõtmine ja ekraanile panek
             while (true) {
@@ -611,12 +601,12 @@ public class MainActivity extends AppCompatActivity {
                     //;E??????????;E??????????;E??????????;E??????????;E??????????;E??????????
                     c++;
 
-                    if(c>10){
-                            String kl = "?";
-                            byte[] bytesToSend = kl.getBytes();
-                            connectedOutputStream.write(bytesToSend);
-                            c=0;
-                            k++;
+                    if (c > 10) {
+                        String kl = "?";
+                        byte[] bytesToSend = kl.getBytes();
+                        connectedOutputStream.write(bytesToSend);
+                        c = 0;
+                        k++;
                     }
 
 
@@ -635,9 +625,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-
-
         }
+
         //Byte saatmine
         public void write(byte[] buffer) {
             try {
